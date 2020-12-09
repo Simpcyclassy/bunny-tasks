@@ -4,11 +4,13 @@ import {
   requestBody,
   request,
   response,
+  httpGet,
   requestParam,
 } from "inversify-express-utils";
 import { Request, Response } from "express";
 import { Task } from "@app/data/task";
 import { BaseController } from "@app/data/utils";
+import { TaskRepo } from "@app/data/task";
 import { secure } from "@app/data/utils"
 import { TaskService } from "@app/services/task";
 import { isID } from "./task.validator";
@@ -29,4 +31,19 @@ export class UserTaskController extends BaseController<ControllerResponse> {
 
     this.handleSuccess(req, res, task);
   }
+
+  @httpGet("/:id/all")
+  async getAllTasksbyUserId(
+    @request() req: Request,
+    @response() res: Response,
+    @requestParam("id") id: string,
+  ) {
+    const user = await TaskRepo.all({
+      conditions: {
+        userId: { $eq: id }
+      },
+    });
+    this.handleSuccess(req, res, user);
+  }
+
 }
