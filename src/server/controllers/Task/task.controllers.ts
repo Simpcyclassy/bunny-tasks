@@ -6,9 +6,10 @@ import {
   response,
   httpGet,
   requestParam,
+  httpPatch
 } from "inversify-express-utils";
 import { Request, Response } from "express";
-import { Task } from "@app/data/task";
+import { Task, TaskDTO } from "@app/data/task";
 import { BaseController } from "@app/data/utils";
 import { TaskRepo } from "@app/data/task";
 import { secure } from "@app/data/utils"
@@ -44,6 +45,19 @@ export class UserTaskController extends BaseController<ControllerResponse> {
       },
     });
     this.handleSuccess(req, res, user);
+  }
+
+  @httpPatch("/:id", secure(isID), secure(isTask))
+  async updateTask(
+    @request() req: Request,
+    @response() res: Response,
+    @requestParam("id") id: string,
+    @requestBody() body: TaskDTO
+  ) {
+    const update: any = { description: body.description };
+
+    const updatedTask = await TaskRepo.atomicUpdate(id, update);
+    this.handleSuccess(req, res, updatedTask);
   }
 
 }
