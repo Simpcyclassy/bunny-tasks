@@ -6,6 +6,7 @@ import {
   response,
   httpGet,
   requestParam,
+  httpDelete,
   httpPatch
 } from "inversify-express-utils";
 import { Request, Response } from "express";
@@ -73,4 +74,17 @@ export class UserTaskController extends BaseController<ControllerResponse> {
     const isTaskDone = await TaskRepo.atomicUpdate(id, update);
     this.handleSuccess(req, res, isTaskDone);
   }
+
+  @httpDelete("/:id", secure(isID))
+  async deleteTask(
+    @request() req: Request,
+    @response() res: Response,
+    @requestParam("id") id: string
+  ) {
+
+    const deletedTask = await TaskRepo.destroy(id);
+
+    this.handleSuccess(req, res, deletedTask);
+  }
+
 }
