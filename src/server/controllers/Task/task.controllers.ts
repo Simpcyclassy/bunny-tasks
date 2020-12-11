@@ -6,7 +6,8 @@ import {
   response,
   httpGet,
   requestParam,
-  httpPatch
+  httpPatch,
+  httpDelete
 } from "inversify-express-utils";
 import { Request, Response } from "express";
 import { Task, TaskDTO } from "@app/data/task";
@@ -23,7 +24,7 @@ type ControllerResponse = Task | Task[] | string;
 @controller("/tasks")
 export class UserTaskController extends BaseController<ControllerResponse> {
   @httpPost("/:id", secure(isID), secure(isTask))
-  async createTaskbyUser(
+  async createTaskbyUserId(
     @request() req: Request,
     @response() res: Response,
     @requestParam("id") id: string,
@@ -72,5 +73,15 @@ export class UserTaskController extends BaseController<ControllerResponse> {
 
     const isTaskDone = await TaskRepo.atomicUpdate(id, update);
     this.handleSuccess(req, res, isTaskDone);
+  }
+
+  @httpDelete("/:id", secure(isID))
+  async deleteUser(
+    @request() req: Request,
+    @response() res: Response,
+    @requestParam("id") id: string
+  ) {
+    const task = await TaskRepo.destroy(id);
+    this.handleSuccess(req, res, task);
   }
 }
