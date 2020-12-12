@@ -42,6 +42,7 @@ export class UserTaskController extends BaseController<ControllerResponse> {
     @requestParam("id") id: string,
   ) {
     const user = await TaskRepo.all({
+      sort: "+created_at",
       conditions: {
         userId: { $eq: id }
       },
