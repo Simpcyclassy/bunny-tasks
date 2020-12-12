@@ -25,7 +25,7 @@ A set of rest endpoints for todos by bunny users
 | PATCH `/tasks/:id/done`                          | Updates a task state to done                                        |
 
 ## Link to Base URL
- * [link]()
+ * [link](https://bunnystudio-task.herokuapp.com/)
 
 
 ## Built With
