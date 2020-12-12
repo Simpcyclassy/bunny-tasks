@@ -24,7 +24,7 @@ type ControllerResponse = Task | Task[] | string;
 @controller("/tasks")
 export class UserTaskController extends BaseController<ControllerResponse> {
   @httpPost("/:id", secure(isID), secure(isTask))
-  async createTaskbyUser(
+  async createTaskbyUserId(
     @request() req: Request,
     @response() res: Response,
     @requestParam("id") id: string,
